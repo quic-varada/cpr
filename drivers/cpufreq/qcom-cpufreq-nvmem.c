@@ -399,6 +399,7 @@ static const char *generic_genpd_names[] = { "perf", NULL };
 
 static const struct qcom_cpufreq_match_data match_data_kryo = {
 	.get_version = qcom_cpufreq_kryo_name_version,
+	.genpd_names = generic_genpd_names,
 };
 
 static const struct qcom_cpufreq_match_data match_data_krait = {
