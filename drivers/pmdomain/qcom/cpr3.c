@@ -2399,12 +2399,12 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
 		if (ret)
 			goto exit;
 
-		if (acc_desc->config)
+		if (acc_desc && acc_desc->config)
 			regmap_multi_reg_write(drv->tcsr, acc_desc->config,
 					       acc_desc->num_regs_per_fuse);
 
 		/* Enable ACC if required */
-		if (acc_desc->enable_mask)
+		if (acc_desc && acc_desc->enable_mask)
 			regmap_update_bits(drv->tcsr, acc_desc->enable_reg,
 					   acc_desc->enable_mask,
 					   acc_desc->enable_mask);
@@ -2676,7 +2676,7 @@ static int cpr_probe(struct platform_device *pdev)
 	desc = data->cpr_desc;
 
 	/* CPRh disallows MEM-ACC access from the HLOS */
-	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPRH)
+	if (!data->acc_desc && desc->cpr_type < CTRL_TYPE_CPR4)
 		return -EINVAL;
 
 	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
@@ -2703,7 +2703,7 @@ static int cpr_probe(struct platform_device *pdev)
 
 	mutex_init(&drv->lock);
 
-	if (desc->cpr_type < CTRL_TYPE_CPRH) {
+	if (desc->cpr_type < CTRL_TYPE_CPR4) {
 		np = of_parse_phandle(dev->of_node, "qcom,acc", 0);
 		if (!np)
 			return -ENODEV;
