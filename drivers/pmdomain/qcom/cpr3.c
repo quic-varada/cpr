@@ -2809,7 +2809,7 @@ unreg_genpd:
 	return ret;
 }
 
-static int cpr_remove(struct platform_device *pdev)
+static void cpr_remove(struct platform_device *pdev)
 {
 	struct cpr_drv *drv = platform_get_drvdata(pdev);
 	int i;
@@ -2824,7 +2824,7 @@ static int cpr_remove(struct platform_device *pdev)
 
 	debugfs_remove_recursive(drv->debugfs);
 
-	return 0;
+	return;
 }
 
 static const struct of_device_id cpr3_match_table[] = {
